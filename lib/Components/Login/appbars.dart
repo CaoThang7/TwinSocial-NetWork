@@ -16,6 +16,13 @@ AppBar buildAppBar(BuildContext context) {
     ),
     backgroundColor: AppColors.baseGrey10Color,
     elevation: 0,
+    leading: IconButton(
+        onPressed: () {},
+        icon: SvgPicture.asset(
+          "assets/icons/delete.svg",
+          height: 16.0,
+          width: 16.0,
+        )),
     actions: [
       Padding(
         padding: const EdgeInsets.all(8.0),
