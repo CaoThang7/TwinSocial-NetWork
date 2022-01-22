@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 import 'package:twin_social_network/Screens/Register/RegisterScreen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:twin_social_network/Screens/RootApp/RootAppScreen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -8,17 +10,29 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class WelcomeScreenSate extends State<WelcomeScreen> {
+  Widget page = WelcomeScreen();
+  final storage = FlutterSecureStorage();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _navigateHome();
+    _checkLogin();
   }
 
-  void _navigateHome() async {
-    await Future.delayed(Duration(milliseconds: 3000), () {});
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+  // Kiểm tra token từ storage khi user đăng nhập
+  // Nếu khác null 3s sau chuyển vào màn hình chính RootAppScreen()
+  // Nếu null vào screen LoginScreen()
+  void _checkLogin() async {
+    String? token = await storage.read(key: "access_token");
+    if (token != null) {
+      await Future.delayed(Duration(milliseconds: 3000), () {});
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => RootAppScreen()));
+    } else {
+      await Future.delayed(Duration(milliseconds: 3000), () {});
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    }
   }
 
   @override

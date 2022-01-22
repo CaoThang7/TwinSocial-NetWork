@@ -7,6 +7,7 @@ import 'package:twin_social_network/Components/Register/valid.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twin_social_network/NetWork/NetworkHandler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:twin_social_network/Screens/RootApp/RootAppScreen.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -34,6 +35,12 @@ class _BodyState extends State<Body> {
         Map<String, dynamic> output = json.decode(response.body);
         print(output["access_token"]);
         await storage.write(key: "access_token", value: output["access_token"]);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RootAppScreen(),
+            ),
+            (route) => false);
       } else {
         print("Error");
       }
