@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:twin_social_network/Components/Login/input_field.dart';
 import 'package:twin_social_network/Components/Login/styles.dart';
 import 'package:twin_social_network/Components/Register/valid.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:twin_social_network/NetWork/NetworkHandler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -13,8 +16,11 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  NetworkHandler networkHandler = NetworkHandler();
   final _globalkey = GlobalKey<FormState>();
   bool visPassword = true;
+  final storage = new FlutterSecureStorage();
+
   void validate() async {
     if (_globalkey.currentState!.validate()) {
       // login
@@ -23,6 +29,14 @@ class _BodyState extends State<Body> {
         "password": _passwordController.text,
       };
       print(data);
+      var response = await networkHandler.post("/login", data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> output = json.decode(response.body);
+        print(output["access_token"]);
+        await storage.write(key: "access_token", value: output["access_token"]);
+      } else {
+        print("Error");
+      }
     }
   }
 
@@ -93,7 +107,8 @@ class _BodyState extends State<Body> {
                   height: 10,
                 ),
                 Align(
-                  alignment: Alignment.center, // Align however you like (i.e .centerRight, centerLeft)
+                  alignment: Alignment
+                      .center, // Align however you like (i.e .centerRight, centerLeft)
                   child: Text(
                     "Quên mật khẩu?",
                     style: textForgotPass,
