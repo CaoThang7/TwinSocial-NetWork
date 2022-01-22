@@ -45,6 +45,7 @@ class _BodyState extends State<Body> {
           responseRegister.statusCode == 201) {
         print("Thanh cong roi");
       } else {
+        _showMyDialog();
         print("That bai");
       }
       ;
@@ -91,6 +92,40 @@ class _BodyState extends State<Body> {
     }else{
       print("Some thing went wrong");
     }
+  }
+  //Show dialog Register
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thất bại'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Đã xảy ra lỗi!'),
+                Text(
+                    'Bạn vui lòng xem lại họ và tên, email đã được sử dụng hoặc kiểm tra kết nối mạng.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Tôi đã hiểu',
+                 style: TextStyle(
+                   color: AppColors.baseOrangeColor
+                 ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -246,6 +281,15 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: Text(
+                    "Tôi đồng ý tất cả các điều khoản để gia nhập\nTwinSocial",
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 SizedBox(
                   height: 10,
