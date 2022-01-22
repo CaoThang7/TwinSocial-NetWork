@@ -15,14 +15,14 @@ class NetworkHandler {
   }
 
    Future<http.Response> post(String url, Map<String, String> body) async {
-    String? token = await storage.read(key: "token");
+    String? access_token= await storage.read(key: "access_token");
     url = formater(url);
     log.d(body);
     var response = await http.post(
       Uri.parse(url),
       headers: {
         "Content-type": "application/json",
-        "Authorization": "Bearer $token"
+        "Authorization": "Bearer $access_token"
       },
       body: json.encode(body),
     );
