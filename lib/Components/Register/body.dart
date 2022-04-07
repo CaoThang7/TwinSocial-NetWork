@@ -7,6 +7,7 @@ import 'package:twin_social_network/Components/Register/valid.dart';
 import 'package:twin_social_network/Models/Gender/GenderModel.dart';
 import 'package:twin_social_network/NetWork/NetworkHandler.dart';
 import 'package:intl/intl.dart';
+import 'package:twin_social_network/Utils/Utils.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class _BodyState extends State<Body> {
   bool visConfirmPassword = true;
   DateTime _selectedDate = DateTime.now();
   String _gender = "Nam";
+  bool isLoading = false;
   final _globalkey = GlobalKey<FormState>();
   NetworkHandler networkHandler = NetworkHandler();
   // Hàm onclick đăng ký check validate
@@ -44,9 +46,26 @@ class _BodyState extends State<Body> {
       if (responseRegister.statusCode == 200 ||
           responseRegister.statusCode == 201) {
         print("Thanh cong roi");
+        setState(() {
+          isLoading = true;
+        });
+        Future.delayed(Duration(seconds: 3), () {
+          setState(() {
+            isLoading = false;
+            showDialogSuccessRegister(context);
+          });
+        });
       } else {
-        _showMyDialog();
         print("That bai");
+        setState(() {
+          isLoading = true;
+        });
+        Future.delayed(Duration(seconds: 3), () {
+          setState(() {
+            isLoading = false;
+            showDialogFaildRegister(context);
+          });
+        });
       }
       ;
     }
@@ -92,40 +111,6 @@ class _BodyState extends State<Body> {
     }else{
       print("Some thing went wrong");
     }
-  }
-  //Show dialog Register
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Thất bại'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('Đã xảy ra lỗi!'),
-                Text(
-                    'Bạn vui lòng xem lại họ và tên, email đã được sử dụng hoặc kiểm tra kết nối mạng.'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Tôi đã hiểu',
-                 style: TextStyle(
-                   color: AppColors.baseOrangeColor
-                 ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -294,23 +279,34 @@ class _BodyState extends State<Body> {
                 SizedBox(
                   height: 10,
                 ),
-                InkWell(
-                  onTap: validate,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: AppColors.baseOrangeColor),
-                    child: Center(
-                      child: Text(
-                        "Đăng Ký",
-                        style: textbtnRegister,
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 24.0),
+                      minimumSize: Size.fromHeight(50),
+                      primary: AppColors.baseOrangeColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0), // <-- Radius
                       ),
                     ),
-                  ),
-                )
+                    onPressed: validate,
+                    child: isLoading
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(color: Colors.white),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Vui lòng chờ ...',
+                                style: textLoadingRegister,
+                              ),
+                            ],
+                          )
+                        : Text(
+                            "Đăng Ký",
+                            style: textbtnRegister,
+                          ))
               ],
             ),
           ),
