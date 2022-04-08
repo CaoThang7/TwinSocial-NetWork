@@ -39,3 +39,11 @@ TextStyle get textbtnLogin{
     )
   );
 } 
+
+TextStyle get textLoadingLogin {
+  return(
+    TextStyle(
+      fontSize: 18,
+      color: AppColors.baseWhiteColor,
+  ));
+}

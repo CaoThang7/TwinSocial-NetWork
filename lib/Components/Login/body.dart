@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:twin_social_network/NetWork/NetworkHandler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:twin_social_network/Screens/RootApp/RootAppScreen.dart';
+import 'package:twin_social_network/Utils/Utils.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool isLoading = false;
   NetworkHandler networkHandler = NetworkHandler();
   final _globalkey = GlobalKey<FormState>();
   bool visPassword = true;
@@ -35,14 +37,31 @@ class _BodyState extends State<Body> {
         Map<String, dynamic> output = json.decode(response.body);
         print(output["access_token"]);
         await storage.write(key: "access_token", value: output["access_token"]);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RootAppScreen(),
-            ),
-            (route) => false);
+        setState(() {
+          isLoading = true;
+        });
+        Future.delayed(Duration(seconds: 3), () {
+          setState(() {
+            isLoading = false;
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RootAppScreen(),
+                ),
+                (route) => false);
+          });
+        });
       } else {
         print("Error");
+        setState(() {
+          isLoading = true;
+        });
+        Future.delayed(Duration(seconds: 3), () {
+          setState(() {
+            isLoading = false;
+            showDialogFaild(context, "Tài khoản hoặc mật khẩu không chính xác.");
+          });
+        });
       }
     }
   }
@@ -124,23 +143,34 @@ class _BodyState extends State<Body> {
                 SizedBox(
                   height: 10,
                 ),
-                InkWell(
-                  onTap: validate,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: AppColors.baseOrangeColor),
-                    child: Center(
-                      child: Text(
-                        "Đăng nhập",
-                        style: textbtnLogin,
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 24.0),
+                      minimumSize: Size.fromHeight(50),
+                      primary: AppColors.baseOrangeColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0), // <-- Radius
                       ),
                     ),
-                  ),
-                )
+                    onPressed: validate,
+                    child: isLoading
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(color: Colors.white),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Vui lòng chờ ...',
+                                style: textLoadingLogin,
+                              ),
+                            ],
+                          )
+                        : Text(
+                            "Đăng Nhập",
+                            style: textbtnLogin,
+                          ))
               ],
             ),
           ),

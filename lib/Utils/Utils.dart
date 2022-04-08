@@ -3,7 +3,7 @@ import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:twin_social_network/Components/Register/styles.dart';
 import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 
-Future<void> showDialogFaildRegister(BuildContext context) async {
+Future<void> showDialogFaild(BuildContext context, String text) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -12,10 +12,9 @@ Future<void> showDialogFaildRegister(BuildContext context) async {
         title: const Text('Thất bại'),
         content: SingleChildScrollView(
           child: ListBody(
-            children: const <Widget>[
+            children: <Widget>[
               Text('Đã xảy ra lỗi!'),
-              Text(
-                  'Bạn vui lòng xem lại họ và tên, email đã được sử dụng hoặc kiểm tra kết nối mạng.'),
+              Text(text),
             ],
           ),
         ),
@@ -35,7 +34,7 @@ Future<void> showDialogFaildRegister(BuildContext context) async {
   );
 }
 
-Future<void> showDialogSuccessRegister(BuildContext context) async {
+Future<void> showDialogSuccess(BuildContext context, String text) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -61,7 +60,7 @@ Future<void> showDialogSuccessRegister(BuildContext context) async {
                         height: 5,
                       ),
                       Text(
-                        'Bạn đã đăng ký thành công',
+                        text,
                         style: textSuccess,
                       ),
                       SizedBox(
@@ -114,5 +113,3 @@ Future<void> showDialogSuccessRegister(BuildContext context) async {
     },
   );
 }
-
-

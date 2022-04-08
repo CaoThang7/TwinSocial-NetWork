@@ -52,7 +52,7 @@ class _BodyState extends State<Body> {
         Future.delayed(Duration(seconds: 3), () {
           setState(() {
             isLoading = false;
-            showDialogSuccessRegister(context);
+            showDialogSuccess(context, 'Bạn đã đăng ký thành công');
           });
         });
       } else {
@@ -63,7 +63,8 @@ class _BodyState extends State<Body> {
         Future.delayed(Duration(seconds: 3), () {
           setState(() {
             isLoading = false;
-            showDialogFaildRegister(context);
+            showDialogFaild(context,
+                'Bạn vui lòng xem lại họ và tên, email đã được sử dụng hoặc kiểm tra kết nối mạng.');
           });
         });
       }
