@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 import 'package:twin_social_network/Screens/Register/RegisterScreen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:twin_social_network/Screens/RootApp/RootAppScreen.dart';
+import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -27,7 +27,7 @@ class WelcomeScreenSate extends State<WelcomeScreen> {
     if (token != null) {
       await Future.delayed(Duration(milliseconds: 3000), () {});
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => RootAppScreen()));
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
     } else {
       await Future.delayed(Duration(milliseconds: 3000), () {});
       Navigator.pushReplacement(

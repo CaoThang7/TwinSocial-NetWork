@@ -7,7 +7,7 @@ import 'package:twin_social_network/Components/Register/valid.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twin_social_network/NetWork/NetworkHandler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:twin_social_network/Screens/RootApp/RootAppScreen.dart';
+import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
 import 'package:twin_social_network/Utils/Utils.dart';
 
 class Body extends StatefulWidget {
@@ -46,7 +46,7 @@ class _BodyState extends State<Body> {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RootAppScreen(),
+                  builder: (context) => HomeScreen(),
                 ),
                 (route) => false);
           });
