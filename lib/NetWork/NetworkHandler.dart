@@ -26,6 +26,7 @@ class NetworkHandler {
       },
       body: json.encode(body),
     );
+    print(response.body);
     return response;
   }
 
