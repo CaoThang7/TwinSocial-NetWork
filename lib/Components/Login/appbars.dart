@@ -28,10 +28,7 @@ AppBar buildAppBar(BuildContext context) {
         padding: const EdgeInsets.all(8.0),
         child: TextButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => RegisterScreen()),
-            );
+            Navigator.pushReplacementNamed(context, '/register');
           },
           child: Text(
             'Đăng ký',

@@ -43,12 +43,7 @@ class _BodyState extends State<Body> {
         Future.delayed(Duration(seconds: 3), () {
           setState(() {
             isLoading = false;
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
-                ),
-                (route) => false);
+            Navigator.pushReplacementNamed(context, '/home');
           });
         });
       } else {
