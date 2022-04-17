@@ -41,6 +41,7 @@ class HomeScreenSate extends State<HomeScreen> {
     return Scaffold(
       body: PageView(
         children: homeScreenItems,
+        physics: NeverScrollableScrollPhysics(), 
         controller: pageController,
         onPageChanged: onPageChanged,
       ),
