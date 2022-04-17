@@ -3,8 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:twin_social_network/Utils/App_Url.dart';
+
 class NetworkHandler {
-  String baseurl = "http://10.0.3.2:5000/api";
+  // String baseurl = "http://10.0.3.2:5000/api";
   var log = Logger();
   FlutterSecureStorage storage = FlutterSecureStorage();
   Future<dynamic> get(String url) async {
@@ -14,8 +16,8 @@ class NetworkHandler {
     log.i(response.statusCode);
   }
 
-   Future<http.Response> post(String url, Map<String, String> body) async {
-    String? access_token= await storage.read(key: "access_token");
+  Future<http.Response> post(String url, Map<String, String> body) async {
+    String? access_token = await storage.read(key: "access_token");
     url = formater(url);
     log.d(body);
     var response = await http.post(
@@ -31,7 +33,6 @@ class NetworkHandler {
   }
 
   String formater(String url) {
-    return baseurl + url;
+    return AppUrl.baseUrl + url;
   }
-
 }
