@@ -5,8 +5,8 @@ import 'package:twin_social_network/Components/Register/input_field.dart';
 import 'package:twin_social_network/Components/Register/styles.dart';
 import 'package:twin_social_network/Components/Register/valid.dart';
 import 'package:twin_social_network/Models/Gender/GenderModel.dart';
-import 'package:twin_social_network/NetWork/NetworkHandler.dart';
 import 'package:intl/intl.dart';
+import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
 import 'package:twin_social_network/Utils/Utils.dart';
 
 class Body extends StatefulWidget {
@@ -27,50 +27,7 @@ class _BodyState extends State<Body> {
   bool isLoading = false;
   final _globalkey = GlobalKey<FormState>();
   NetworkHandler networkHandler = NetworkHandler();
-  // Hàm onclick đăng ký check validate
-  void validate() async {
-    if (_globalkey.currentState!.validate()) {
-      // Đẩy dữ liệu khi người dùng nhập vào lên database thông qua api register
-      Map<String, String> data = {
-        "fullname": _fullnameController.text,
-        "username": _usernameController.text,
-        "email": _emailController.text,
-        "password": _passwordController.text,
-        "gender": _gender,
-        "birthday": DateFormat.yMd().format(_selectedDate),
-      };
-      print(data);
-
-      var responseRegister = await networkHandler.post("/register", data);
-
-      if (responseRegister.statusCode == 200 ||
-          responseRegister.statusCode == 201) {
-        print("Thanh cong roi");
-        setState(() {
-          isLoading = true;
-        });
-        Future.delayed(Duration(seconds: 3), () {
-          setState(() {
-            isLoading = false;
-            showDialogSuccess(context, 'Bạn đã đăng ký thành công');
-          });
-        });
-      } else {
-        print("That bai");
-        setState(() {
-          isLoading = true;
-        });
-        Future.delayed(Duration(seconds: 3), () {
-          setState(() {
-            isLoading = false;
-            showDialogFaild(context,
-                'Bạn vui lòng xem lại họ và tên, email đã được sử dụng hoặc kiểm tra kết nối mạng.');
-          });
-        });
-      }
-      ;
-    }
-  }
+  
   //Show Calendar
   Future<void> _getDateFromUser(BuildContext context) async {
       DateTime? picked = await showDatePicker(
@@ -289,7 +246,7 @@ class _BodyState extends State<Body> {
                         borderRadius: BorderRadius.circular(8.0), // <-- Radius
                       ),
                     ),
-                    onPressed: validate,
+                    onPressed: () {},
                     child: isLoading
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
