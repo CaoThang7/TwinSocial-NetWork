@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:twin_social_network/Controllers/LoadingCtrl.dart';
 import 'package:twin_social_network/Models/Login/LoginModel.dart';
+import 'package:twin_social_network/Navigation/Navigation.dart';
 import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
 import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
 import 'package:twin_social_network/Utils/Utils.dart';
@@ -25,7 +26,7 @@ class LoginController extends GetxController {
       print(data["msg"]);
       if (data["msg"] == "Login Success!") {
         await loadingController.loadingButton();
-        Get.to(HomeScreen());
+        Navigation.homeScreen;
       }
     }
   }

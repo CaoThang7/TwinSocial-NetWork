@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:twin_social_network/Navigation/Navigation.dart';
 import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 import 'package:twin_social_network/Screens/Register/RegisterScreen.dart';
 
@@ -28,7 +29,7 @@ AppBar buildAppBar(BuildContext context) {
         padding: const EdgeInsets.all(8.0),
         child: TextButton(
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/register');
+            Navigation.registerScreen;
           },
           child: Text(
             'Đăng ký',
