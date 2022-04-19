@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
+import 'package:twin_social_network/Controllers/LoadingCtrl.dart';
+import 'package:twin_social_network/Controllers/LoginCtrl.dart';
 import 'package:twin_social_network/Components/Login/input_field.dart';
 import 'package:twin_social_network/Components/Login/styles.dart';
 import 'package:twin_social_network/Components/Register/valid.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:twin_social_network/NetWork/NetworkHandler.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
 import 'package:twin_social_network/Utils/Utils.dart';
+import 'package:get/get.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -16,55 +18,14 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool isLoading = false;
-  NetworkHandler networkHandler = NetworkHandler();
-  final _globalkey = GlobalKey<FormState>();
   bool visPassword = true;
-  final storage = new FlutterSecureStorage();
-
-  void validate() async {
-    if (_globalkey.currentState!.validate()) {
-      // login
-      Map<String, String> data = {
-        "email": _emailController.text,
-        "password": _passwordController.text,
-      };
-      print(data);
-      var response = await networkHandler.post("/login", data);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map<String, dynamic> output = json.decode(response.body);
-        print(output["access_token"]);
-        await storage.write(key: "access_token", value: output["access_token"]);
-        setState(() {
-          isLoading = true;
-        });
-        Future.delayed(Duration(seconds: 3), () {
-          setState(() {
-            isLoading = false;
-            Navigator.pushReplacementNamed(context, '/home');
-          });
-        });
-      } else {
-        print("Error");
-        setState(() {
-          isLoading = true;
-        });
-        Future.delayed(Duration(seconds: 3), () {
-          setState(() {
-            isLoading = false;
-            showDialogFaild(context, "Tài khoản hoặc mật khẩu không chính xác.");
-          });
-        });
-      }
-    }
-  }
+  var loginController = Get.put(LoginController());
+  var loadingController = Get.put(LoadingController());
 
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(() => setState(() {}));
+    loginController.emailController.addListener(() => setState(() {}));
   }
 
   @override
@@ -75,7 +36,7 @@ class _BodyState extends State<Body> {
         color: AppColors.baseGrey10Color,
         child: SingleChildScrollView(
           child: Form(
-            key: _globalkey,
+            key: loginController.globalkey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -93,9 +54,9 @@ class _BodyState extends State<Body> {
                 // input_field nhập Email
                 InputLogin(
                   hint: "email",
-                  controller: _emailController,
+                  controller: loginController.emailController,
                   valid_input: validEmail,
-                  suffixIcon: _emailController.text.isEmpty
+                  suffixIcon: loginController.emailController.text.isEmpty
                       ? Container(width: 0)
                       : IconButton(
                           icon: SvgPicture.asset(
@@ -103,14 +64,15 @@ class _BodyState extends State<Body> {
                             height: 10,
                             width: 10,
                           ),
-                          onPressed: () => _emailController.clear(),
+                          onPressed: () =>
+                              loginController.emailController.clear(),
                         ),
                   visBool: false,
                 ),
                 // input_field nhập Password
                 InputLogin(
                   hint: "password",
-                  controller: _passwordController,
+                  controller: loginController.passwordController,
                   valid_input: validPassword,
                   suffixIcon: IconButton(
                     icon: visPassword
@@ -138,7 +100,7 @@ class _BodyState extends State<Body> {
                 SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(
+                Obx(() => ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       textStyle: TextStyle(fontSize: 24.0),
                       minimumSize: Size.fromHeight(50),
@@ -147,8 +109,8 @@ class _BodyState extends State<Body> {
                         borderRadius: BorderRadius.circular(8.0), // <-- Radius
                       ),
                     ),
-                    onPressed: validate,
-                    child: isLoading
+                    onPressed: loginController.login,
+                    child: loadingController.isLoading.value
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -165,7 +127,7 @@ class _BodyState extends State<Body> {
                         : Text(
                             "Đăng Nhập",
                             style: textbtnLogin,
-                          ))
+                          )))
               ],
             ),
           ),
