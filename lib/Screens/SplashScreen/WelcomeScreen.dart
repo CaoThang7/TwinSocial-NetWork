@@ -3,6 +3,7 @@ import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 import 'package:twin_social_network/Screens/Register/RegisterScreen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
+import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -22,8 +23,11 @@ class WelcomeScreenSate extends State<WelcomeScreen> {
   // Kiểm tra token từ storage khi user đăng nhập
   // Nếu khác null 3s sau chuyển vào màn hình chính RootAppScreen()
   // Nếu null vào screen LoginScreen()
+
+ 
   void _checkLogin() async {
-    String? token = await storage.read(key: "access_token");
+    // String? token = await storage.read(key: "access_token");
+    var token = await NetworkHandler.getToken("access_token");
     if (token != null) {
       await Future.delayed(Duration(milliseconds: 3000), () {});
       Navigator.pushReplacement(
