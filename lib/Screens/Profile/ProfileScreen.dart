@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:twin_social_network/Components/Profile/appbars.dart';
 import 'package:twin_social_network/Components/Profile/body.dart';
-import 'package:twin_social_network/NetWork/NetworkHandler.dart';
 
 class ProfileScreen extends StatefulWidget {
  
