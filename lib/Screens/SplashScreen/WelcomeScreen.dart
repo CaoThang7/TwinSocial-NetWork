@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
-import 'package:twin_social_network/Screens/Register/RegisterScreen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
+import 'package:twin_social_network/Components/SplashScreen/body.dart';
 import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
+import 'package:get/get.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -21,41 +20,21 @@ class WelcomeScreenSate extends State<WelcomeScreen> {
   }
 
   // Kiểm tra token từ storage khi user đăng nhập
-  // Nếu khác null 3s sau chuyển vào màn hình chính RootAppScreen()
-  // Nếu null vào screen LoginScreen()
-
- 
+  // Nếu khác null 3s sau chuyển vào màn hình chính homeScreen()
+  // Nếu null vào screen loginScreen()
   void _checkLogin() async {
-    // String? token = await storage.read(key: "access_token");
     var token = await NetworkHandler.getToken("access_token");
     if (token != null) {
       await Future.delayed(Duration(milliseconds: 3000), () {});
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      Get.toNamed("/homeScreen");
     } else {
       await Future.delayed(Duration(milliseconds: 3000), () {});
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      Get.toNamed("/loginScreen");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-          width: 350.0,
-          height: 350.0,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              alignment: Alignment.center,
-              fit: BoxFit.cover,
-              image: AssetImage("assets/images/logoTwinSocial.jpg"),
-            ),
-          ),
-        ),
-      ),
-    );
+    return Body(); // body WelcomeScreen
   }
 }
