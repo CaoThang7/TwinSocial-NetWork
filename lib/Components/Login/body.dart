@@ -18,6 +18,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final globalkey = GlobalKey<FormState>();
   bool visPassword = true;
   var loginController = Get.put(LoginController());
   var loadingController = Get.put(LoadingController());
@@ -28,6 +29,11 @@ class _BodyState extends State<Body> {
     loginController.emailController.addListener(() => setState(() {}));
   }
 
+  void onClickLogin() async {
+    globalkey.currentState!.validate(); //check validation from login
+    loginController.login();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +42,7 @@ class _BodyState extends State<Body> {
         color: AppColors.baseGrey10Color,
         child: SingleChildScrollView(
           child: Form(
-            key: loginController.globalkey,
+            key: globalkey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -109,7 +115,7 @@ class _BodyState extends State<Body> {
                         borderRadius: BorderRadius.circular(8.0), // <-- Radius
                       ),
                     ),
-                    onPressed: loginController.login,
+                    onPressed: onClickLogin,
                     child: loadingController.isLoading.value
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
