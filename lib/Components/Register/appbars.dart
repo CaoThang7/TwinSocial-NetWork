@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twin_social_network/Navigation/Navigation.dart';
@@ -28,7 +29,7 @@ AppBar buildAppBar(BuildContext context) {
         padding: const EdgeInsets.all(8.0),
         child: TextButton(
           onPressed: () {
-            Navigation.loginScreen;
+            Get.toNamed("/loginScreen");
           },
           child: Text(
             'Đăng nhập',

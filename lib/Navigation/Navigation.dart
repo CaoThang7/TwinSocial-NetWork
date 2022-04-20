@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
 import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 import 'package:twin_social_network/Screens/Register/RegisterScreen.dart';
-class Navigation {
-   static Future? homeScreen =  Get.to(HomeScreen());
-   static Future? registerScreen =  Get.to(RegisterScreen());
-   static Future? loginScreen =  Get.to(LoginScreen());
+
+List<GetPage<dynamic>> get Navigation {
+  return [
+    GetPage(name: '/homeScreen', page: () => HomeScreen()),
+    GetPage(name: '/loginScreen', page: () => LoginScreen()),
+    GetPage(name: '/registerScreen', page: () => RegisterScreen()),
+  ];
 }
