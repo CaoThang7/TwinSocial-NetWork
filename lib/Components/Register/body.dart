@@ -4,10 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:twin_social_network/Components/Register/input_field.dart';
 import 'package:twin_social_network/Components/Register/styles.dart';
 import 'package:twin_social_network/Components/Register/valid.dart';
+import 'package:twin_social_network/Controllers/LoadingCtrl.dart';
+import 'package:twin_social_network/Controllers/RegisterCtrl.dart';
 import 'package:twin_social_network/Models/Gender/GenderModel.dart';
 import 'package:intl/intl.dart';
-import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
 import 'package:twin_social_network/Utils/Utils.dart';
+import 'package:get/get.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -15,68 +17,24 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final _fullnameController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmController = TextEditingController();
   bool visPassword = true;
   bool visConfirmPassword = true;
-  DateTime _selectedDate = DateTime.now();
-  String _gender = "Nam";
-  bool isLoading = false;
-  final _globalkey = GlobalKey<FormState>();
-  NetworkHandler networkHandler = NetworkHandler();
-  
-  //Show Calendar
-  Future<void> _getDateFromUser(BuildContext context) async {
-      DateTime? picked = await showDatePicker(
-        context: context,
-        builder: (BuildContext context, Widget ?child) {
-        //Custom Theme Calendar
-        return Theme(
-          data: ThemeData(
-            primarySwatch: Colors.grey,
-            splashColor: Colors.black,
-            textTheme: TextTheme(
-            subtitle1: TextStyle(color: Colors.black),
-            button: TextStyle(color: Colors.black),
-          ),
-          colorScheme: ColorScheme.light(
-            primary: AppColors.baseOrangeColor,
-            primaryVariant: Colors.black,
-            secondaryVariant: Colors.black,
-            onSecondary: Colors.black,
-            onPrimary: Colors.white,
-            surface: Colors.black,
-            onSurface: Colors.black,
-            secondary: Colors.black),
-            dialogBackgroundColor: Colors.white,
-        ),
-        child: child ??Text(""),
-      );
-    }
-    initialDate: DateTime.now(),
-    firstDate: DateTime(1960, 8),
-    lastDate: DateTime.now()
-    );
-    //Nếu giá trị khi người dùng chọn trong calendar khác rỗng
-    //Biến _selectedDate sẽ = giá trị người dùng chọn
-    if(picked != null){
-      setState(() {
-        _selectedDate = picked;
-      });
-    }else{
-      print("Some thing went wrong");
-    }
-  }
+  var loadingController = Get.put(LoadingController());
+  final globalkey = GlobalKey<FormState>();
+
+  var registerController = Get.put(RegisterController());
 
   @override
   void initState() {
     super.initState();
-    _fullnameController.addListener(() => setState(() {}));
-    _usernameController.addListener(() => setState(() {}));
-    _emailController.addListener(() => setState(() {}));
+    registerController.fullnameController.addListener(() => setState(() {}));
+    registerController.usernameController.addListener(() => setState(() {}));
+    registerController.emailController.addListener(() => setState(() {}));
+  }
+
+  void onClickRegister() async {
+    globalkey.currentState!.validate(); //check validation from login
+    registerController.register();
   }
 
   @override
@@ -89,15 +47,15 @@ class _BodyState extends State<Body> {
           padding: EdgeInsets.symmetric(horizontal: 15.0),
           color: AppColors.baseGrey10Color,
           child: Form(
-            key: _globalkey,
+            key: globalkey,
             child: Column(
               children: [
                 // Input Họ và tên
                 InputRegister(
                   hint: "Họ và tên",
-                  controller: _fullnameController,
+                  controller: registerController.fullnameController,
                   valid_input: validFullName,
-                  suffixIcon: _fullnameController.text.isEmpty
+                  suffixIcon: registerController.fullnameController.text.isEmpty
                       ? Container(width: 0)
                       : IconButton(
                           icon: SvgPicture.asset(
@@ -105,16 +63,17 @@ class _BodyState extends State<Body> {
                             height: 10,
                             width: 10,
                           ),
-                          onPressed: () => _fullnameController.clear(),
+                          onPressed: () =>
+                              registerController.fullnameController.clear(),
                         ),
                   visBool: false,
                 ),
                 // Input Tên tài khoản
                 InputRegister(
                   hint: "Tên tài khoản",
-                  controller: _usernameController,
+                  controller: registerController.usernameController,
                   valid_input: validUserName,
-                  suffixIcon: _usernameController.text.isEmpty
+                  suffixIcon: registerController.usernameController.text.isEmpty
                       ? Container(width: 0)
                       : IconButton(
                           icon: SvgPicture.asset(
@@ -122,16 +81,17 @@ class _BodyState extends State<Body> {
                             height: 10,
                             width: 10,
                           ),
-                          onPressed: () => _usernameController.clear(),
+                          onPressed: () =>
+                              registerController.usernameController.clear(),
                         ),
                   visBool: false,
                 ),
                 // Input Email
                 InputRegister(
                   hint: "email",
-                  controller: _emailController,
+                  controller: registerController.emailController,
                   valid_input: validEmail,
-                  suffixIcon: _emailController.text.isEmpty
+                  suffixIcon: registerController.emailController.text.isEmpty
                       ? Container(width: 0)
                       : IconButton(
                           icon: SvgPicture.asset(
@@ -139,14 +99,15 @@ class _BodyState extends State<Body> {
                             height: 10,
                             width: 10,
                           ),
-                          onPressed: () => _emailController.clear(),
+                          onPressed: () =>
+                              registerController.emailController.clear(),
                         ),
                   visBool: false,
                 ),
                 // Input Password
                 InputRegister(
                   hint: "Mật khẩu",
-                  controller: _passwordController,
+                  controller: registerController.passwordController,
                   valid_input: validPassword,
                   suffixIcon: IconButton(
                     icon: visPassword
@@ -163,7 +124,7 @@ class _BodyState extends State<Body> {
                 // Input Confirm Password
                 InputRegister(
                   hint: "Xác nhận mật khẩu",
-                  controller: _confirmController,
+                  controller: registerController.confirmController,
                   valid_input: validConfirmPassword,
                   suffixIcon: IconButton(
                     icon: visConfirmPassword
@@ -181,48 +142,54 @@ class _BodyState extends State<Body> {
                 Row(
                   children: [
                     // Input giới tính
-                    Expanded(
-                      child: InputRegister(
-                        hint: _gender,
-                        suffixIcon: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            elevation: 0,
-                            iconSize: 32,
-                            // lấy dữ liệu từ GenderModel và map ra
-                            items: GenderModel().genderList.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value.toString(),
-                                child: Text(
-                                  value.toString(),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (String? value) {
-                              setState(() {
-                                _gender = value!;
-                              });
-                            },
+                    Obx(
+                      () => Expanded(
+                        child: InputRegister(
+                          hint: registerController.gender.value,
+                          suffixIcon: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              elevation: 0,
+                              iconSize: 32,
+                              // lấy dữ liệu từ GenderModel và map ra
+                              items:
+                                  GenderModel().genderList.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value.toString(),
+                                  child: Text(
+                                    value.toString(),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  registerController.gender.value = value!;
+                                });
+                              },
+                            ),
                           ),
+                          visBool: false,
                         ),
-                        visBool: false,
                       ),
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     // Input ngày sinh
-                    Expanded(
-                      child: InputRegister(
-                        hint: DateFormat.yMd().format(_selectedDate),
-                        suffixIcon: IconButton(
-                          icon: SvgPicture.asset("assets/icons/calendar.svg"),
-                          onPressed: () {
-                            _getDateFromUser(context);
-                          },
+                    Obx(
+                      () => Expanded(
+                        child: InputRegister(
+                          hint: DateFormat.yMd()
+                              .format(registerController.selectedDate.value),
+                          suffixIcon: IconButton(
+                            icon: SvgPicture.asset("assets/icons/calendar.svg"),
+                            onPressed: () {
+                              getDateFromUser(context);
+                            },
+                          ),
+                          visBool: false,
                         ),
-                        visBool: false,
                       ),
-                    ),
+                    )
                   ],
                 ),
                 SizedBox(
@@ -237,7 +204,7 @@ class _BodyState extends State<Body> {
                 SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(
+                Obx(() => ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       textStyle: TextStyle(fontSize: 24.0),
                       minimumSize: Size.fromHeight(50),
@@ -246,8 +213,8 @@ class _BodyState extends State<Body> {
                         borderRadius: BorderRadius.circular(8.0), // <-- Radius
                       ),
                     ),
-                    onPressed: () {},
-                    child: isLoading
+                    onPressed: onClickRegister,
+                    child: loadingController.isLoading.value
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -264,7 +231,7 @@ class _BodyState extends State<Body> {
                         : Text(
                             "Đăng Ký",
                             style: textbtnRegister,
-                          ))
+                          )))
               ],
             ),
           ),
