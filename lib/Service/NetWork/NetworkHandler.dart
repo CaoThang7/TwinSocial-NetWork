@@ -16,6 +16,14 @@ class NetworkHandler {
     return response.body;
   }
 
+  static Future<dynamic> get(String endpoint, String? access_token) async {
+    var response = await client.get(buildUrl(endpoint), headers: {
+      "Content-type": "application/json",
+      "authorization": "Bearer $access_token"
+    });
+    return response.body;
+  }
+
   static Uri buildUrl(String endpoint) {
     final apiPath = AppUrl.baseUrl + endpoint;
     return Uri.parse(apiPath);
