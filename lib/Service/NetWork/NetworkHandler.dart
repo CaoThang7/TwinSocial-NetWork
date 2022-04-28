@@ -8,6 +8,8 @@ import 'package:twin_social_network/Utils/App_Url.dart';
 class NetworkHandler {
   static final client = http.Client();
   static final storage = FlutterSecureStorage();
+
+  // http post
   static Future<String> post(var body, String endpoint) async {
     var response = await client.post(buildUrl(endpoint), body: body, headers: {
       "Content-type": "application/json",
@@ -16,6 +18,7 @@ class NetworkHandler {
     return response.body;
   }
 
+  // http get
   static Future<dynamic> get(String endpoint, String? access_token) async {
     var response = await client.get(buildUrl(endpoint), headers: {
       "Content-type": "application/json",
@@ -24,16 +27,24 @@ class NetworkHandler {
     return response.body;
   }
 
+  // buildUrl
   static Uri buildUrl(String endpoint) {
     final apiPath = AppUrl.baseUrl + endpoint;
     return Uri.parse(apiPath);
   }
 
+  // store save Token
   static Future<void> storeToken(String token) async {
     await storage.write(key: "access_token", value: token);
   }
 
+  // get token in storage
   static Future<String?> getToken(String token) async {
     return await storage.read(key: "access_token");
+  }
+
+  // removeToken in storage
+  static Future<void> removeToken() async {
+    return await storage.delete(key: "access_token");
   }
 }
