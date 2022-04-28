@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
+import 'package:twin_social_network/Controllers/ProfileCtrl.dart';
 import 'package:twin_social_network/Utils/global_variable.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenSate extends State<HomeScreen> {
   int _page = 0;
   late PageController pageController; // for tabs animation
-
+  var profileController = Get.put(ProfileController()); //setState Profile
   @override
   void initState() {
     super.initState();
@@ -41,7 +43,7 @@ class HomeScreenSate extends State<HomeScreen> {
     return Scaffold(
       body: PageView(
         children: homeScreenItems,
-        physics: NeverScrollableScrollPhysics(), 
+        physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,
       ),
