@@ -15,6 +15,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final image = "https://cdn-icons-png.flaticon.com/128/2026/2026518.png";
   @override
   void initState() {
     super.initState();
@@ -57,8 +58,7 @@ class _BodyState extends State<Body> {
                 backgroundColor: AppColors.baseDarkOrangeColor,
                 radius: 54.0,
                 child: CircleAvatar(
-                  backgroundImage:
-                      AssetImage("assets/images/logoTwinSocial.jpg"),
+                  backgroundImage: NetworkImage(image),
                   radius: 50.0,
                 ),
               ),
