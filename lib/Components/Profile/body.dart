@@ -1,5 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
+import 'package:get/get.dart';
+import 'package:twin_social_network/Components/Profile/styles.dart';
+import 'package:twin_social_network/Controllers/ProfileCtrl.dart';
+import 'package:twin_social_network/Models/Profile/UserList.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -9,6 +15,21 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var mapData = json.decode(sharedPreferences.getString("profile") ?? "");
+    setState(() {
+      UserDataList.fullname = mapData["fullname"];
+      UserDataList.email = mapData["email"];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,17 +44,12 @@ class _BodyState extends State<Body> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Beny Deep",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.baseDarkOrangeColor),
+                    UserDataList.fullname,
+                    style: textFullname,
                   ),
                   Text(
-                    "benydeep123@gmail.com",
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
+                    UserDataList.email,
+                    style: textEmail,
                   ),
                 ],
               ),
@@ -59,17 +75,11 @@ class _BodyState extends State<Body> {
                 children: [
                   Text(
                     "0",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: textNumber,
                   ),
                   Text(
                     "Nguời theo dõi",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    style: textFollowers,
                   ),
                 ],
               ),
@@ -78,17 +88,11 @@ class _BodyState extends State<Body> {
                 children: [
                   Text(
                     "0",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: textNumber,
                   ),
                   Text(
                     "Đang theo dõi",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                    style: textFollow,
                   ),
                 ],
               ),
