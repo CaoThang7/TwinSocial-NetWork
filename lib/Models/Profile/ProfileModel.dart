@@ -1,52 +1,38 @@
-class ProfileModel {
-  final String fullname;
-  final String username;
-  final String email;
-  final String password;
-  final String gender;
-  final String birthday;
+import 'dart:convert';
 
-  const ProfileModel({
-    required this.fullname,
-    required this.username,
-    required this.email,
-    required this.password,
-    required this.gender,
-    required this.birthday,
+ProfileModel ProfileModelFromJson(String str) =>
+    ProfileModel.fromJson(json.decode(str));
+
+String ProfileModelToJson(ProfileModel data) => json.encode(data.toJson());
+
+class ProfileModel {
+  ProfileModel({
+    this.id,
+    this.fullname,
+    this.username,
+    this.gender,
+    this.birthday,
   });
 
-  ProfileModel copy({
-    String? fullname,
-    String? username,
-    String? email,
-    String? password,
-    String? gender,
-    String? birthday,
-  }) =>
-      ProfileModel(
-        fullname: fullname ?? this.fullname,
-        username: username ?? this.username,
-        email: email ?? this.email,
-        password: fullname ?? this.password,
-        gender: fullname ?? this.gender,
-        birthday: fullname ?? this.birthday,
-      );
+  String? id;
+  String? fullname;
+  String? username;
+  String? gender;
+  String? birthday;
 
-  static ProfileModel fromJson(Map<String, dynamic> json) => ProfileModel(
-        fullname: json['fullname'],
-        username: json['username'],
-        email: json['email'],
-        password: json['password'],
-        gender: json['gender'],
-        birthday: json['birthday'],
+  factory ProfileModel.fromJson(Map<String?, dynamic> json) => ProfileModel(
+        id: json["id"],
+        fullname: json["fullname"],
+        username: json["username"],
+        gender: json["gender"],
+        birthday: json["birthday"],
       );
 
   Map<String, dynamic> toJson() => {
-        'fullname': fullname,
-        'username': username,
-        'email': email,
-        'password': password,
-        'gender': gender,
-        'birthday': birthday,
+        "id": id,
+        "fullname": fullname,
+        "username": username,
+        "gender": gender,
+        "birthday": birthday,
       };
 }
