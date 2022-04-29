@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:twin_social_network/Components/Register/styles.dart';
+import 'package:twin_social_network/Controllers/ProfileCtrl.dart';
 import 'package:twin_social_network/Controllers/RegisterCtrl.dart';
 import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 import 'package:get/get.dart';
 
 var registerController = Get.put(RegisterController());
+ var profileController = Get.put(ProfileController());
 Future<void> showDialogFaild(BuildContext context, String text) async {
   return showDialog<void>(
     context: context,
@@ -153,6 +155,7 @@ Future<void> getDateFromUser(BuildContext context) async {
   if(picked != null){
     registerController.selectedDate.value = picked;
     print(registerController.selectedDate);
+    profileController.selectedDate.value= picked;
   }else{
     print("Some thing went wrong");
   }

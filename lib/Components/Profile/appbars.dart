@@ -50,7 +50,7 @@ void onSelected(BuildContext context, Object? item) {
       print("Settings");
       break;
     case DropdownMenuProfile.itemInfomation:
-      print("Infomation");
+      Get.toNamed("/detailProfileScreen");
       break;
     case DropdownMenuProfile.itemSignOut:
       loginController.logout(); // logout with getx

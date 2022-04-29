@@ -16,6 +16,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final image = "https://cdn-icons-png.flaticon.com/128/2026/2026518.png";
+  var profileController = Get.put(ProfileController());
   @override
   void initState() {
     super.initState();
@@ -28,6 +29,8 @@ class _BodyState extends State<Body> {
     setState(() {
       UserDataList.fullname = mapData["fullname"];
       UserDataList.email = mapData["email"];
+      UserDataList.username = mapData["username"];
+      UserDataList.gender = mapData["gender"];
     });
   }
 
