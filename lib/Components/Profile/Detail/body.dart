@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:twin_social_network/Components/Profile/Detail/image_picker.dart';
 import 'package:twin_social_network/Components/Register/input_field.dart';
 import 'package:twin_social_network/Components/Register/valid.dart';
 import 'package:twin_social_network/Controllers/LoadingCtrl.dart';
@@ -12,7 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:twin_social_network/Models/Profile/UserList.dart';
 import 'package:twin_social_network/Utils/Utils.dart';
 import 'package:get/get.dart';
-
+import 'package:image_picker/image_picker.dart';
 class Body extends StatefulWidget {
   @override
   _BodyState createState() => _BodyState();
@@ -22,7 +24,8 @@ class _BodyState extends State<Body> {
   final globalkey = GlobalKey<FormState>();
   var profileController = Get.put(ProfileController());
   var loadingController = Get.put(LoadingController());
-
+  final ImagePicker picker = ImagePicker();
+  File? imageFile;
   @override
   void initState() {
     super.initState();
@@ -56,6 +59,10 @@ class _BodyState extends State<Body> {
                   )
                 : Column(
                     children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ImgPicker(), // Image Profile with Image Picker
                       // Input Họ và tên
                       InputRegister(
                         hint: UserDataList.fullname,

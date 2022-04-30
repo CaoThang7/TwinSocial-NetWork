@@ -13,6 +13,8 @@ class ProfileController extends GetxController {
   TextEditingController usernameController = TextEditingController();
   RxString gender = "Nam".obs;
   var selectedDate = DateTime.now().obs;
+  var isProficPicPathSet = false.obs;
+  var profilePicPath = "".obs;
   var loadingController = Get.put(LoadingController());
   @override
   void onInit() {
@@ -20,6 +22,11 @@ class ProfileController extends GetxController {
     super.onInit();
     getProfile();
     updateUser();
+  }
+
+  Future<void> setProfileImagePath(String path) async {
+    profilePicPath.value = path;
+    isProficPicPathSet.value = true;
   }
 
   Future<void> getProfile() async {
