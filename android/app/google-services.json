@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "377353802228",
+    "project_id": "twinsocial-3e4a4",
+    "storage_bucket": "twinsocial-3e4a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377353802228:android:f9d6b791eca422b61969a1",
+        "android_client_info": {
+          "package_name": "com.example.twin_social_network"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377353802228-4i66rj2qg71copg30l69dhirttmt0d3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrPgkmE5n_rrfQFuZLlFjdA_szQK9xMQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377353802228-4i66rj2qg71copg30l69dhirttmt0d3o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
