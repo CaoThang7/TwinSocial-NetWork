@@ -25,7 +25,6 @@ class LoginController extends GetxController {
         await NetworkHandler.post(loginModelToJson(loginModel), "login");
     var data = json.decode(response);
     await NetworkHandler.storeToken(data["access_token"]);
-    print(data["msg"]);
     if (data["msg"] == "Login Success!") {
       await loadingController.loadingButton();
       Get.toNamed("/homeScreen");
