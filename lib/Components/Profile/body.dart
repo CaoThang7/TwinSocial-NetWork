@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:get/get.dart';
@@ -9,7 +11,6 @@ import 'package:twin_social_network/Models/Profile/UserList.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
-
   @override
   State<Body> createState() => _BodyState();
 }
@@ -31,6 +32,7 @@ class _BodyState extends State<Body> {
       UserDataList.email = mapData["email"];
       UserDataList.username = mapData["username"];
       UserDataList.gender = mapData["gender"];
+      UserDataList.avatar = mapData["avatar"];
     });
   }
 
@@ -61,7 +63,7 @@ class _BodyState extends State<Body> {
                 backgroundColor: AppColors.baseDarkOrangeColor,
                 radius: 54.0,
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(image),
+                  backgroundImage: NetworkImage(UserDataList.avatar ?? image),
                   radius: 50.0,
                 ),
               ),
