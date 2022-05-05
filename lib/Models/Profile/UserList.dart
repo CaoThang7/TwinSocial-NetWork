@@ -6,4 +6,5 @@ class UserDataList {
   static String password = "";
   static String gender = "";
   static String birthday = "";
+  static String? avatar;
 }

@@ -10,6 +10,7 @@ class ProfileModel {
     this.id,
     this.fullname,
     this.username,
+    this.avatar,
     this.gender,
     this.birthday,
   });
@@ -17,6 +18,7 @@ class ProfileModel {
   String? id;
   String? fullname;
   String? username;
+  String? avatar;
   String? gender;
   String? birthday;
 
@@ -24,6 +26,7 @@ class ProfileModel {
         id: json["id"],
         fullname: json["fullname"],
         username: json["username"],
+        avatar: json["avatar"],
         gender: json["gender"],
         birthday: json["birthday"],
       );
@@ -32,6 +35,7 @@ class ProfileModel {
         "id": id,
         "fullname": fullname,
         "username": username,
+        "avatar": avatar,
         "gender": gender,
         "birthday": birthday,
       };
