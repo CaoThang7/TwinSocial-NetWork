@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:twin_social_network/Controllers/ProfileCtrl.dart';
+import 'package:twin_social_network/Models/Profile/UserList.dart';
 
 class ImgPicker extends StatefulWidget {
   const ImgPicker({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class ImgPicker extends StatefulWidget {
 
 class _ImgPickerState extends State<ImgPicker> {
   ProfileController profileController = Get.find();
+  final image = "https://cdn-icons-png.flaticon.com/128/2026/2026518.png";
   final ImagePicker picker = ImagePicker();
   File? imageFile;
   @override
@@ -30,7 +32,7 @@ class _ImgPickerState extends State<ImgPicker> {
                           true
                       ? FileImage(File(profileController.profilePicPath.value))
                           as ImageProvider
-                      : AssetImage("assets/images/logoandroid.png"),
+                      : NetworkImage(UserDataList.avatar ?? image),
                   radius: 80,
                 ),
               ),
@@ -109,6 +111,7 @@ class _ImgPickerState extends State<ImgPicker> {
     });
     print(imageFile);
     profileController.setProfileImagePath(imageFile!.path);
-    Get.back();
+    profileController.upLoadImage(); 
+    Get.back(); // cloase bottom sheet when pick image
   }
 }

@@ -15,6 +15,7 @@ import 'package:twin_social_network/Models/Profile/UserList.dart';
 import 'package:twin_social_network/Utils/Utils.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 class Body extends StatefulWidget {
   @override
   _BodyState createState() => _BodyState();
@@ -26,6 +27,7 @@ class _BodyState extends State<Body> {
   var loadingController = Get.put(LoadingController());
   final ImagePicker picker = ImagePicker();
   File? imageFile;
+
   @override
   void initState() {
     super.initState();
