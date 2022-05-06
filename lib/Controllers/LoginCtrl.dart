@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:twin_social_network/Controllers/LoadingCtrl.dart';
 import 'package:twin_social_network/Models/Login/LoginModel.dart';
+import 'package:twin_social_network/Models/Profile/UserList.dart';
 import 'package:twin_social_network/Navigation/Navigation.dart';
 import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
 import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
@@ -27,6 +29,11 @@ class LoginController extends GetxController {
     await NetworkHandler.storeToken(data["access_token"]);
     if (data["msg"] == "Login Success!") {
       await loadingController.loadingButton();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      Map<String?, dynamic> idUser = {
+        "id": data["user"]["_id"],
+      };
+      prefs.setString("idUser", json.encode(idUser));
       Get.toNamed("/homeScreen");
       emailController.clear(); // after login value email clear
       passwordController.clear(); // after login value password clear

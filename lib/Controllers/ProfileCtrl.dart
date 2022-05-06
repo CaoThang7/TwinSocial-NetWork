@@ -23,6 +23,7 @@ class ProfileController extends GetxController {
   var profilePicPath = "".obs;
   String? profileImageBase64;
   String? urlDownload;
+  String? getIdUser;
   var loadingController = Get.put(LoadingController());
   @override
   void onInit() {
@@ -40,9 +41,12 @@ class ProfileController extends GetxController {
   }
 
   Future<void> getProfile() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var mapData = json.decode(sharedPreferences.getString("idUser") ?? "");
+    getIdUser = mapData["id"];
     var scopedToken = await NetworkHandler.getToken("access_token");
     access_token?.value = scopedToken!;
-    var response = await NetworkHandler.get("getProfile", scopedToken);
+    var response = await NetworkHandler.get("user/$getIdUser", scopedToken);
     print("profile ne ba: $response");
     var data = json.decode(response);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -58,11 +62,14 @@ class ProfileController extends GetxController {
   }
 
   Future<void> updateUser() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var mapData = json.decode(sharedPreferences.getString("idUser") ?? "");
+    getIdUser = mapData["id"];
     var scopedToken = await NetworkHandler.getToken("access_token");
     access_token?.value = scopedToken!;
     final networkHandler = NetworkHandler();
     ProfileModel profileModel = ProfileModel(
-      id: UserDataList.id,
+      id: getIdUser,
       fullname: fullnameController.text,
       username: usernameController.text,
       avatar: urlDownload,
@@ -92,9 +99,11 @@ class ProfileController extends GetxController {
     final path = 'files/${profileImageBase64}';
     final bytes = File(profilePicPath.value);
     final ref = FirebaseStorage.instance.ref().child(path);
-    final uploadTask = ref.putFile(bytes); 
-    final snapshot = await uploadTask.whenComplete(() => {}); // upload file image to firebase
-    urlDownload = await snapshot.ref.getDownloadURL(); //get link image in firebase
+    final uploadTask = ref.putFile(bytes);
+    final snapshot = await uploadTask
+        .whenComplete(() => {}); // upload file image to firebase
+    urlDownload =
+        await snapshot.ref.getDownloadURL(); //get link image in firebase
     print("Download Link: $urlDownload");
   }
 }
