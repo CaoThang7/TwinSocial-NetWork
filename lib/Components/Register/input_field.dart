@@ -10,15 +10,17 @@ class InputRegister extends StatefulWidget {
   final valid_input;
   final suffixIcon;
   final bool visBool;
-  const InputRegister({
-    Key? key,
-    required this.hint,
-    this.controller,
-    this.widget,
-    this.valid_input,
-    this.suffixIcon,
-    required this.visBool,
-  }) : super(key: key);
+  final onchange;
+  const InputRegister(
+      {Key? key,
+      required this.hint,
+      this.controller,
+      this.widget,
+      this.valid_input,
+      this.suffixIcon,
+      required this.visBool,
+      this.onchange})
+      : super(key: key);
 
   @override
   State<InputRegister> createState() => _InputRegisterState();
@@ -32,6 +34,7 @@ class _InputRegisterState extends State<InputRegister> {
       child: Column(
         children: [
           TextFormField(
+            onChanged: widget.onchange,
             obscureText: widget.visBool,
             autofocus: false,
             controller: widget.controller,
