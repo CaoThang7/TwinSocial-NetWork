@@ -21,4 +21,5 @@ class AppColors {
   static const baseWhiteColor = Color(0xffffffff);
   static const basewhite60Color = Color(0xffF6F6F6);
   static const baseOrangeColor = Color(0xffFF4500);
+  static const baseSeaShellColor = Color(0xffFFF5EE);
 }

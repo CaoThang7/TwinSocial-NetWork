@@ -63,8 +63,13 @@ class MySearch extends SearchDelegate {
                           return ListTile(
                             onTap: () {
                               print(searchController.userLists[i].id);
-                              Get.toNamed("userSocialScreen",
-                                  arguments: searchController.userLists[i].id);
+                              Get.toNamed("userSocialScreen", arguments: [
+                                {"id": searchController.userLists[i].id},
+                                {"fullname": searchController.userLists[i].fullname},
+                                {"username": searchController.userLists[i].username},
+                                {"avatar": searchController.userLists[i].avatar}
+                              ]);
+                              // searchController.userLists[i].id);
                             },
                             title: Text(searchController.userLists[i].username),
                           );
