@@ -4,6 +4,7 @@ import 'package:twin_social_network/Screens/Home/HomeScreen.dart';
 import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 import 'package:twin_social_network/Screens/Profile/DetailProfile.dart';
 import 'package:twin_social_network/Screens/Register/RegisterScreen.dart';
+import 'package:twin_social_network/Screens/Search/UserSocial.dart';
 
 List<GetPage<dynamic>> get Navigation {
   return [
@@ -11,5 +12,6 @@ List<GetPage<dynamic>> get Navigation {
     GetPage(name: '/loginScreen', page: () => LoginScreen()),
     GetPage(name: '/registerScreen', page: () => RegisterScreen()),
     GetPage(name: '/detailProfileScreen', page: () => DetailProfile()),
+    GetPage(name: '/userSocialScreen', page: () => UserSocial()),
   ];
 }
