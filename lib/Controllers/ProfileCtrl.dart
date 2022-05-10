@@ -68,7 +68,7 @@ class ProfileController extends GetxController {
     var scopedToken = await NetworkHandler.getToken("access_token");
     access_token?.value = scopedToken!;
     final networkHandler = NetworkHandler();
-    ProfileModel profileModel = ProfileModel(
+    ProfileUserModel profileModel = ProfileUserModel(
       id: getIdUser,
       fullname: fullnameController.text,
       username: usernameController.text,
