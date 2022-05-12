@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twin_social_network/Components/UserSocial/styles.dart';
+import 'package:twin_social_network/Controllers/FollowCtrl.dart';
 import 'package:twin_social_network/Navigation/Navigation.dart';
-import 'package:twin_social_network/Screens/Login/LoginScreen.dart';
 
 AppBar buildAppBar(BuildContext context) {
   var data = Get.arguments;
+  var followController = Get.put(FollowController());
   return AppBar(
     centerTitle: true,
     title: Text(
@@ -26,16 +27,25 @@ AppBar buildAppBar(BuildContext context) {
           width: 16.0,
         )),
     actions: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextButton(
-          onPressed: () {},
-          child: Text(
-            'Theo dõi',
-            style: textAction,
-          ),
-        ),
-      )
+      Obx(() => followController.isFollow.value
+          ? TextButton(
+              onPressed: () {
+                followController.handleUnFollow();
+              },
+              child: Text(
+                "Huỷ",
+                style: textAction,
+              ),
+            )
+          : TextButton(
+              onPressed: () {
+                followController.handleFollow();
+              },
+              child: Text(
+                "Theo dõi",
+                style: textAction,
+              ),
+            ))
     ],
   );
 }

@@ -5,6 +5,8 @@ import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:get/get.dart';
 import 'package:twin_social_network/Components/UserSocial/styles.dart';
 import 'package:twin_social_network/Components/UserSocial/user_social_profile.dart';
+import 'package:twin_social_network/Controllers/FollowCtrl.dart';
+import 'package:twin_social_network/Models/User/UserModel.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -13,8 +15,8 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final image = "https://cdn-icons-png.flaticon.com/128/2026/2026518.png";
   var data = Get.arguments;
+  var followController = Get.put(FollowController());
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,7 @@ class _BodyState extends State<Body> {
           profileUserSocial(), // get profile user social
           Center(
             child: Text("abc"),
-          )
+          ),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:twin_social_network/Components/UserSocial/custom_clippath.dart';
 import 'package:twin_social_network/Components/UserSocial/styles.dart';
+import 'package:twin_social_network/Controllers/FollowCtrl.dart';
 import '../../AppColors/app_colors.dart';
 
 class profileUserSocial extends StatefulWidget {
@@ -13,6 +14,8 @@ class profileUserSocial extends StatefulWidget {
 
 class _profileUserSocialState extends State<profileUserSocial> {
   var data = Get.arguments;
+  var followController = Get.put(FollowController());
+
   @override
   Widget build(BuildContext context) {
     return Opacity(
@@ -50,7 +53,7 @@ class _profileUserSocialState extends State<profileUserSocial> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "0",
+                          followController.listfollowing.length!.toString(),
                           style: textNumber,
                         ),
                         Text(
@@ -63,7 +66,7 @@ class _profileUserSocialState extends State<profileUserSocial> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "0",
+                          followController.listfollowers.length!.toString(),
                           style: textNumber,
                         ),
                         Text(

@@ -29,6 +29,17 @@ class NetworkHandler {
     return response.body;
   }
 
+  // http patchFollow, unFollow
+  static Future<String> patchFollow(
+      var body, String endpoint, String? access_token) async {
+    var response = await client.patch(buildUrl(endpoint), body: body, headers: {
+      "Content-type": "application/json",
+      "authorization": "Bearer $access_token"
+    });
+    print(response.body);
+    return response.body;
+  }
+
   // http get
   static Future<dynamic> get(String endpoint, String? access_token) async {
     var response = await client.get(buildUrl(endpoint), headers: {
