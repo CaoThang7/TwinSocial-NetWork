@@ -18,6 +18,17 @@ class NetworkHandler {
     return response.body;
   }
 
+  // http createPostUser
+  static Future<String> createPostUser(
+      var body, String endpoint, String? access_token) async {
+    var response = await client.post(buildUrl(endpoint), body: body, headers: {
+      "Content-type": "application/json",
+      "authorization": "Bearer $access_token"
+    });
+    print(response.body);
+    return response.body;
+  }
+
   // http patch
   static Future<String> patch(
       var body, String endpoint, String? access_token) async {
