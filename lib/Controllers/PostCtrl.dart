@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:twin_social_network/Models/Post/PostModel.dart';
 import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 
 class PostController extends GetxController {
   RxString? access_token;
@@ -15,10 +17,14 @@ class PostController extends GetxController {
   var urlDownload;
   List<String> _arrImage = [];
   TextEditingController contentController = TextEditingController();
+  List<PostModel> ulist = [];
+  List<PostModel> userLists = [];
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    loadData();
+    getPost();
   }
 
   void uploadFunction(List<XFile> _images) {
@@ -56,4 +62,28 @@ class PostController extends GetxController {
     var data = json.decode(response);
     print("??? $data");
   }
+
+  Future<List<PostModel>> getPost() async {
+    var scopedToken = await NetworkHandler.getToken("access_token");
+    access_token?.value = scopedToken!;
+    final response = await http.get(Uri.parse('http://10.0.3.2:5000/api/posts'),
+        headers: {
+          "Content-type": "application/json",
+          "authorization": "Bearer $scopedToken"
+        });
+    print("ra chua??? ${response.body}");
+    return compute(decodeJson, response.body);
+  }
+
+  void loadData() async {
+    getPost().then((userFromServer) {
+      ulist = userFromServer;
+      userLists = ulist;
+    });
+  }
+}
+
+List<PostModel> decodeJson(String responseBody) {
+  final myJson = json.decode(responseBody);
+  return myJson.map<PostModel>((json) => PostModel.fromJson(json)).toList();
 }
