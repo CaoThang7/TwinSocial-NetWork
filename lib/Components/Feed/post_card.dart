@@ -1,5 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
+import 'package:twin_social_network/Models/Profile/MenuProfile.dart';
+import 'package:twin_social_network/Utils/DropdownMenu.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -12,6 +17,42 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
+  }
+
+  // onSelected item Dropdown
+  void onSelected(BuildContext context, Object? item) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var mapData = json.decode(sharedPreferences.getString("idUser") ?? "");
+    String getIdUser = mapData["id"];
+    switch (item) {
+      case DropdownMenuPost.edit:
+        print(widget.snap.id);
+        if (getIdUser != widget.snap.userId["_id"]) {
+          Get.snackbar(
+            "Lỗi rồi",
+            "Bạn không thể cập nhật bài viết của người khác",
+            snackPosition: SnackPosition.BOTTOM,
+            margin: EdgeInsets.all(10),
+            backgroundColor: AppColors.baseDarkOrangeColor,
+            colorText: AppColors.baseWhiteColor,
+          );
+        } else {
+          Get.toNamed("updatePostScreen", arguments: [
+            {"id": widget.snap.id},
+            {"avatar": widget.snap.userId["avatar"]},
+            {"fullname": widget.snap.userId["fullname"]},
+            {"images": widget.snap.images[0]},
+            {"content": widget.snap.content},
+          ]);
+        }
+        break;
+      case DropdownMenuPost.remove:
+        print("xoa");
+        break;
+      case DropdownMenuPost.copylink:
+        print("copy link");
+        break;
+    }
   }
 
   @override
@@ -65,10 +106,27 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.more_vert),
-                  )
+                  PopupMenuButton(
+                      icon: const Icon(Icons.more_vert),
+                      onSelected: (item) => onSelected(context, item),
+                      itemBuilder: (context) {
+                        return DropdownMenuPost.itemsFirst
+                            .map((MenuProfile item) {
+                          return PopupMenuItem(
+                            value: item,
+                            child: Row(
+                              children: [
+                                Icon(item.icon, color: Colors.black),
+                                const SizedBox(width: 20),
+                                Text(
+                                  item.text,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          );
+                        }).toList();
+                      })
                 ],
               ),
             ),
