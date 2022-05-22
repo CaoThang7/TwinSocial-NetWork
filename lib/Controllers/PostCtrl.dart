@@ -19,7 +19,7 @@ class PostController extends GetxController {
   TextEditingController contentController = TextEditingController();
   List<PostModel> ulist = [];
   List<PostModel> userLists = [];
-  @override
+
   void onInit() {
     // TODO: implement onInit
     super.onInit();
@@ -73,6 +73,35 @@ class PostController extends GetxController {
         });
     print("ra chua??? ${response.body}");
     return compute(decodeJson, response.body);
+  }
+
+  Future<void> updatePost(String idPost, String imagesPost) async {
+    var scopedToken = await NetworkHandler.getToken("access_token");
+    access_token?.value = scopedToken!;
+    PostModel postModel =
+        PostModel(content: contentController.text, images: imagesPost);
+    var response = await NetworkHandler.patch(
+        postModelToJson(postModel), "post/${idPost}", scopedToken);
+    var data = json.decode(response);
+    if (data["msg"] == "Updated Post!") {
+      Get.snackbar(
+        "Update thanh cong!",
+        data["msg"],
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+        backgroundColor: AppColors.baseDarkOrangeColor,
+        colorText: AppColors.baseWhiteColor,
+      );
+    } else {
+      Get.snackbar(
+        "Lỗi rồi",
+        data["msg"],
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+        backgroundColor: AppColors.baseDarkOrangeColor,
+        colorText: AppColors.baseWhiteColor,
+      );
+    }
   }
 
   void loadData() async {

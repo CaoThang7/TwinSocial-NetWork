@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
+import 'package:twin_social_network/Controllers/PostCtrl.dart';
 import 'package:twin_social_network/Models/Profile/MenuProfile.dart';
+import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
 import 'package:twin_social_network/Utils/DropdownMenu.dart';
+import 'package:favorite_button/favorite_button.dart';
+import '../../Models/Post/PostModel.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -14,9 +18,63 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  var postController = Get.put(PostController());
+  var listLike;
+  String? getIdUser;
+  var isLike = false;
   @override
   void initState() {
     super.initState();
+    checkIfLike();
+  }
+
+  Future<void> checkIfLike() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var mapData = json.decode(sharedPreferences.getString("idUser") ?? "");
+    getIdUser = mapData["id"];
+    listLike = widget.snap.likes;
+    for (var i = 0; i < listLike.length; i++) {
+      print(listLike[i]);
+      if (listLike[i] == getIdUser) {
+        setState(() {
+          isLike = true;
+        });
+      }
+    }
+  }
+
+  Future<void> likePost() async {
+    RxString? access_token;
+    var scopedToken = await NetworkHandler.getToken("access_token");
+    access_token?.value = scopedToken!;
+    PostModel postModel = PostModel(
+      userId: widget.snap.userId['_id'],
+    );
+    var response = await NetworkHandler.patch(
+        postModelToJson(postModel), "post/${widget.snap.id}/like", scopedToken);
+    var data = json.decode(response);
+    if (data['msg'] == "The post has been liked") {
+      setState(() {
+        isLike = true;
+      });
+    }
+  }
+
+  Future<void> dislike() async {
+    RxString? access_token;
+    var scopedToken = await NetworkHandler.getToken("access_token");
+    access_token?.value = scopedToken!;
+    PostModel postModel = PostModel(
+      userId: widget.snap.userId['_id'],
+    );
+    var response = await NetworkHandler.patch(postModelToJson(postModel),
+        "post/${widget.snap.id}/unlike", scopedToken);
+    var data = json.decode(response);
+    if (data['msg'] == "The post has been disliked") {
+      setState(() {
+        isLike = false;
+      });
+    }
   }
 
   // onSelected item Dropdown
@@ -81,7 +139,7 @@ class _PostCardState extends State<PostCard> {
           children: [
             // HEADER SECTION OF THE POST
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16)
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 14)
                   .copyWith(right: 0),
               child: Row(
                 children: [
@@ -149,41 +207,56 @@ class _PostCardState extends State<PostCard> {
               ),
             ),
             // LIKE COMMENT SECTION
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.comment_outlined,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.send,
-                  ),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: IconButton(
-                      icon: const Icon(Icons.bookmark_border),
-                      onPressed: () {},
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5)
+                  .copyWith(right: 0),
+              child: Row(
+                children: [
+                  isLike
+                      ? IconButton(
+                          onPressed: () {
+                            dislike();
+                          },
+                          icon: const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            likePost();
+                          },
+                          icon: const Icon(
+                            Icons.favorite_border,
+                          ),
+                        ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.comment_outlined,
                     ),
                   ),
-                )
-              ],
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.send,
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.bookmark_border),
+                        onPressed: () {},
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
             // DESCRIPTION AND NUMBER OF COMMENTS
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   Container(

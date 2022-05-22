@@ -10,18 +10,21 @@ class PostModel {
     this.userId,
     this.content,
     this.images,
+    this.likes
   });
 
   var id;
   var userId;
   var content;
   var images;
+  var likes;
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         id: json["_id"],
         userId: json["userId"],
         content: json["content"],
         images: json["images"],
+        likes:json["likes"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,5 +32,6 @@ class PostModel {
         "userId": userId,
         "content": content,
         "images": images,
+        "likes":likes
       };
 }

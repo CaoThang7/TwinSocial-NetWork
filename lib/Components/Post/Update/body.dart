@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:twin_social_network/AppColors/app_colors.dart';
 import 'package:twin_social_network/Components/Post/input_field.dart';
 import 'package:twin_social_network/Controllers/PostCtrl.dart';
-import 'package:twin_social_network/Models/Post/PostModel.dart';
-import 'package:twin_social_network/Service/NetWork/NetworkHandler.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -19,39 +17,6 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> updatePost() async {
-    RxString? access_token;
-    var scopedToken = await NetworkHandler.getToken("access_token");
-    access_token?.value = scopedToken!;
-    final networkHandler = NetworkHandler();
-    PostModel postModel = PostModel(
-        content: postController.contentController.text,
-        images: data[1]['avatar']);
-    var response = await NetworkHandler.patch(
-        postModelToJson(postModel), "post/${data[0]['id']}", scopedToken);
-    var dataa = json.decode(response);
-    if (dataa["msg"] == "Updated Post!") {
-      Get.snackbar(
-        "Update thanh cong!",
-        dataa["msg"],
-        snackPosition: SnackPosition.BOTTOM,
-        margin: EdgeInsets.all(10),
-        backgroundColor: AppColors.baseDarkOrangeColor,
-        colorText: AppColors.baseWhiteColor,
-      );
-    } else {
-      Get.snackbar(
-        "Lỗi rồi",
-        dataa["msg"],
-        snackPosition: SnackPosition.BOTTOM,
-        margin: EdgeInsets.all(10),
-        backgroundColor: AppColors.baseDarkOrangeColor,
-        colorText: AppColors.baseWhiteColor,
-      );
-    }
-    return;
   }
 
   @override
@@ -92,7 +57,8 @@ class _BodyState extends State<Body> {
                       ),
                       IconButton(
                         onPressed: () {
-                          updatePost();
+                          postController.updatePost(
+                              data[0]['id'], data[1]['avatar']);
                         },
                         icon: Icon(
                           Icons.done,
